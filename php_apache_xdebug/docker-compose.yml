@@ -1,0 +1,15 @@
+version: "3"
+
+services:
+  php_apache:
+    build: ./docker
+    container_name: server
+    restart: always
+    tty: true
+    working_dir: /var/www/html
+    ports:
+      - "80:80"
+    volumes:
+      - /Users/mateus/Sites:/var/www/html:delegated # PHP projects folder
+      - ./docker/php/conf.d/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+      - ./docker/php/conf.d/error_reporting.ini:/usr/local/etc/php/conf.d/error_reporting.ini
