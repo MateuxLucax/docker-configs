@@ -1,0 +1,22 @@
+version: "2.1"
+
+services:
+  transmission:
+    image: lscr.io/linuxserver/transmission
+    container_name: transmission
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Sao_Paulo
+      - TRANSMISSION_WEB_HOME=/flood-for-transmission/
+      - USER=mateux
+      - PASS=8402
+    volumes:
+      - /home/mateux/projects/transmission/config:/config
+      - /home/mateux/Storage/Downloads:/downloads
+      - /home/mateux/Storage/Downloads/watch:/watch
+    ports:
+      - 9091:9091
+      - 51413:51413
+      - 51413:51413/udp
+    restart: unless-stopped
