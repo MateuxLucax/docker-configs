@@ -1,0 +1,15 @@
+version: "2.1"
+
+services:
+  openvscode-server:
+    image: lscr.io/linuxserver/openvscode-server
+    container_name: openvscode-server
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Sao_Paulo
+    volumes:
+      - /srv/dev-disk-by-label-data/dockerapp/openvscode-server:/config
+    ports:
+      - 3000:3000
+    restart: unless-stopped

@@ -1,29 +1,17 @@
-version: "3.7"
+version: "2.1"
 
 services:
   plex:
+    image: lscr.io/linuxserver/plex
     container_name: plex
-    image: linuxserver/plex:1.20.1.3252-a78fef9a9-ls116
-    network_mode: bridge
-    restart: unless-stopped
-    devices:
-      - /dev/dri:/dev/dri
+    network_mode: host
     environment:
       - PUID=1000
       - PGID=1000
-      - TZ=America/Sao_Paulo
       - VERSION=docker
       - PLEX_CLAIM=claim-gke5qTV5kryXwuoTtG8e
-    ports:
-      - "32400:32400"
-      - "3005:3005"
-      - "8324:8324"
-      - "32410:32410/udp"
-      - "32412:32412/udp"
-      - "32413:32413/udp"
-      - "32414:32414/udp"
-      - "32469:32469"
     volumes:
-      - ./config:/config
-      - ./transcode:/transcode # this is not strictly necessary, but I've configured Plex to use this directory for transcoding. Should make it easier to backup only the configuration and not transcoding artifacts.
-      - /home/mateux/Storage:/data/Media:ro
+      - /srv/dev-disk-by-label-data/dockerapp/sonarr/plex:/config
+      - /home/mateux/storage/series:/tv:ro
+      - /home/mateux/storage/movies:/movies:ro
+    restart: unless-stopped

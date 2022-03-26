@@ -13,8 +13,8 @@ services:
       TZ: 'America/Sao_Paulo'
       WEBPASSWORD: '02082001'
     volumes:
-      - './etc-pihole/:/etc/pihole/'
-      - './etc-dnsmasq.d/:/etc/dnsmasq.d/'
+      - '/srv/dev-disk-by-label-data/dockerapp/pihole/etc-pihole/:/etc/pihole/'
+      - '/srv/dev-disk-by-label-data/dockerapp/pihole/etc-dnsmasq.d/:/etc/dnsmasq.d/'
     cap_add:
       - NET_ADMIN
     restart: unless-stopped

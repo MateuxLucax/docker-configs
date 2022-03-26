@@ -1,0 +1,23 @@
+version: "2.1"
+
+services:
+  readarr:
+    image: lscr.io/linuxserver/readarr:0.1.0-nightly
+    container_name: readarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Brazil
+    volumes:
+      - /srv/dev-disk-by-label-data/dockerapp/readarr:/config
+      - /mnt/storage/books:/books
+      - /home/mateux/downloads:/downloads
+    ports:
+      - 8787:8787
+    restart: unless-stopped
+    networks:
+      - torrent
+
+networks:
+  torrent:
+    external: true
