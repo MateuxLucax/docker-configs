@@ -1,0 +1,15 @@
+version: "2"
+services:
+    ytdl_material:
+        environment: 
+            ALLOW_CONFIG_MUTATIONS: 'true'
+        restart: always
+        volumes:
+            - /srv/dev-disk-by-label-data/dockerapp/youtube-downloader/appdata:/app/appdata
+            - /srv/dev-disk-by-label-data/dockerapp/youtube-downloader/audio:/app/audio
+            - /srv/dev-disk-by-label-data/dockerapp/youtube-downloader/video:/app/video
+            - /srv/dev-disk-by-label-data/dockerapp/youtube-downloader/subscriptions:/app/subscriptions
+            - /srv/dev-disk-by-label-data/dockerapp/youtube-downloader/users:/app/users
+        ports:
+            - "8998:17442"
+        image: tzahi12345/youtubedl-material:latest

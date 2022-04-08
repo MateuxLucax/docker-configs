@@ -1,0 +1,14 @@
+version: "3"
+
+services:
+  server:
+    build: ./docker
+    container_name: server
+    restart: always
+    tty: true
+    working_dir: /var/www/html/public
+    ports:
+      - "80:80"
+    volumes:
+      - /Users/mateus/Sites:/var/www/html/public # PHP projects folder
+      - ./docker/conf/xdebug.ini:/etc/php/7.4/mods-available/xdebug.ini
