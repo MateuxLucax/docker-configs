@@ -9,9 +9,9 @@ services:
       - PUID=1000
       - PGID=1000
       - VERSION=docker
-      - PLEX_CLAIM=claim-gke5qTV5kryXwuoTtG8e
+      - PLEX_CLAIM=claim-NkdRwfkmLD4vFWnPZbPT
     volumes:
-      - /srv/dev-disk-by-label-data/dockerapp/sonarr/plex:/config
+      - /srv/dev-disk-by-label-data/dockerapp/plex:/config
       - /home/mateux/storage/series:/tv:ro
       - /home/mateux/storage/movies:/movies:ro
     restart: unless-stopped
