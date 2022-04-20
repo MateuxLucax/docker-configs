@@ -1,4 +1,4 @@
-FROM php:7.2-apache
+FROM php:7.2-apache-stretch
 
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -19,6 +19,8 @@ RUN install-php-extensions gd curl mbstring memcached pgsql zip xml pdo_pgsql
 
 RUN pecl install xdebug-3.1.0 && docker-php-ext-enable xdebug
 
-RUN echo "ServerName localhost" | sudo tee /etc/apache2/conf-available/servername.conf
+RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
+
+RUN service apache2 restart
 
 EXPOSE 80
