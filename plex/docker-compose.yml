@@ -9,7 +9,7 @@ services:
       - PUID=1000
       - PGID=1000
       - VERSION=docker
-      - PLEX_CLAIM=claim-NkdRwfkmLD4vFWnPZbPT
+      - PLEX_CLAIM=<add-plex-claim>
     volumes:
       - /srv/dev-disk-by-label-data/dockerapp/plex:/config
       - /home/mateux/storage/series:/tv:ro

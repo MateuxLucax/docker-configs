@@ -9,8 +9,6 @@ services:
       - PGID=1000
       - TZ=Brazil
       - TRANSMISSION_WEB_HOME=/flood-for-transmission/
-      - USER=mateux
-      - PASS=8402
     volumes:
       - /srv/dev-disk-by-label-data/dockerapp/transmission:/config
       - /home/mateux/downloads:/downloads
