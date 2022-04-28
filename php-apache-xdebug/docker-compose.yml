@@ -12,5 +12,3 @@ services:
       - "80:80"
     volumes:
       - /Users/mateus/Sites:/var/www/html:delegated # PHP projects folder
-      - ./docker/conf/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini:cached
-      - ./docker/conf/error_reporting.ini:/usr/local/etc/php/conf.d/error_reporting.ini:cached
