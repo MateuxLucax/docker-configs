@@ -10,7 +10,7 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
     volumes:
-      - /Users/mateus/Sites:/var/www/html:delegated
+      - ${APPLICATIONS}:/var/www/html:cached
 
   nginx:
     build: ./docker/nginx
@@ -21,6 +21,6 @@ services:
     ports:   
       - 80:80
     volumes:
-      - /Users/mateus/Sites:/var/www/html:delegated
+      - ${APPLICATIONS}:/var/www/html:cached
     depends_on:
       - php-fpm
