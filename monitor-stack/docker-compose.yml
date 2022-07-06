@@ -37,11 +37,13 @@ services:
       - "9200:9200"
       - "9300:9300"
     volumes:
-      - elastic_data:/usr/share/elasticsearch/data' 
+      - elastic_data:/usr/share/elasticsearch/data 
     environment:
       - discovery.type=single-node
-      - ES_JAVA_OPTS=-Xms512m -Xmx512m
+      - ES_JAVA_OPTS=-Xms4096m -Xmx4096m
       - ELASTIC_PASSWORD=monitor
+    networks:
+      - elastic-net
 
   kibana:
     image: docker.elastic.co/kibana/kibana:7.12.0
@@ -54,6 +56,8 @@ services:
       - ELASTICSEARCH_PASSWORD=monitor
     depends_on:
       - elastic
+    networks:
+      - elastic-net
 
   memcached:
     container_name: memcached
@@ -61,9 +65,23 @@ services:
     ports:
         - "11211:11211"
 
+  kafka-webview:
+    container_name: kafka-webview
+    image: sourcelaborg/kafka-webview:latest
+    ports:
+        - "6060:8080"
+    volumes:
+        - kafkawebview_data:/app/data
+    networks:
+        - kafka-net
+    depends_on:
+        - kafka
+
 networks:
+  elastic-net:
+    external: true
   kafka-net:
-    driver: bridge
+    external: true
 
 volumes:
   zookeeper_data:
@@ -71,4 +89,6 @@ volumes:
   kafka_data:
     driver: local
   elastic_data:
+    driver: local
+  kafkawebview_data:
     driver: local
