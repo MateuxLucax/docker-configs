@@ -8,11 +8,12 @@ services:
       - PUID=1000
       - PGID=1000
       - TZ=America/Sao_Paulo
-      - JELLYFIN_PublishedServerUrl=192.168.0.231
+      - JELLYFIN_PublishedServerUrl=jellyfin.gargantua.one
     volumes:
       - /srv/dev-disk-by-label-data/dockerapp/jellyfin:/config
-      - /mnt/storage/series:/data/tvshows
-      - /mnt/storage/movies:/data/movies
+      - /mnt/storage/series:/data/tvshows:ro
+      - /mnt/storage/movies:/data/movies:ro
+      - /mnt/storage/music:/data/music:ro
     devices:
       - /dev/dri:/dev/dri
     ports:
