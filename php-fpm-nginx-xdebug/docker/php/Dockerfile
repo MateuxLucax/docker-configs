@@ -17,6 +17,7 @@ RUN apk add --no-cache --virtual .phpize_deps $PHPIZE_DEPS \
   libpng-dev \
   libmemcached-dev \
   postgresql-dev \
+  postgresql-libs \
   icu-dev \
   libzip-dev \
   zip \
@@ -26,12 +27,15 @@ RUN apk add --no-cache --virtual .phpize_deps $PHPIZE_DEPS \
   --with-gd \
   && docker-php-ext-configure zip \
   --with-libzip \
+  && docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql \
   && docker-php-ext-install -j$(nproc) gd \
   && pecl install memcached-3.1.3 \
   && docker-php-ext-enable memcached \
   && pecl install xdebug-3.1.0 \
   && docker-php-ext-enable xdebug \
   && docker-php-ext-install -j$(nproc) opcache \
+  && docker-php-ext-install -j$(nproc) pdo \
+  && docker-php-ext-install -j$(nproc) pgsql \
   && docker-php-ext-install -j$(nproc) pdo_pgsql \
   && docker-php-ext-install -j$(nproc) intl \
   && docker-php-ext-install -j$(nproc) sockets \
@@ -40,4 +44,4 @@ RUN apk add --no-cache --virtual .phpize_deps $PHPIZE_DEPS \
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-EXPOSE 9000
+EXPOSE 9003
