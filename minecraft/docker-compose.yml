@@ -1,22 +1,55 @@
-version: "3"
-
 services:
   minecraft:
     container_name: minecraft
     image: itzg/minecraft-server
-    ports:
-      - 25565:25565
     environment:
       EULA: "TRUE"
-      MOTD: "Gargantua's minecraft server"
-      SEED: "-1465919862"
-      VIEW_DISTANCE: 16
+      MOTD: ${MOTD}
+      SEED: ${SEED}
+      VIEW_DISTANCE: 24
+      RCON_PASSWORD: ${RCON_PASSWORD}
+      INIT_MEMORY: 2G
+      MAX_MEMORY: 8G
+      DIFFICULTY: normal
     tty: true
     stdin_open: true
     restart: unless-stopped
+    networks:
+      - tunnel
+      - services
     deploy:
      resources:
        limits:
-         memory: 3G
+         cpus: '4'
+         memory: 8G
+    ports:
+      - 25565:25565
     volumes:
-      - /srv/dev-disk-by-label-data/dockerapp/minecraft:/data
+      - ${DOCKER_VOLUME_PATH}/minecraft:/data
+
+  minecraft-admin:
+    container_name: minecraft-admin
+    image: itzg/rcon
+    environment:
+      RWA_USERNAME: ${RWA_USERNAME}
+      RWA_PASSWORD: ${RWA_PASSWORD}
+      RWA_ADMIN: ${RWA_ADMIN}
+      RWA_RCON_HOST: ${RWA_RCON_HOST}              
+      RWA_RCON_PASSWORD: ${RWA_RCON_PASSWORD}
+    networks:
+      - services
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 1G
+    volumes:
+      - ${DOCKER_VOLUME_PATH}/minecraft-admin:/opt/rcon-web-admin/db
+    depends_on:
+      - minecraft
+
+networks:
+  services:
+    external: true
+  tunnel:
+    external: true

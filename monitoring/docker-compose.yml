@@ -1,39 +1,58 @@
-version: '3'
-
 services:
   prometheus:
     image: prom/prometheus:latest
     container_name: prometheus
-    ports:
-      - "9090:9090"
+    networks:
+      - services
+      - monitoring
     volumes:
-      - /srv/dev-disk-by-label-data/dockerapp/prometheus:/etc/prometheus
-      - prometheus-data:/prometheus
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - ${DOCKER_VOLUME_PATH}/prometheus:/prometheus
     restart: unless-stopped
     command:
       - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.retention.time=1y"
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
 
   grafana:
     image: grafana/grafana-oss:latest
     container_name: grafana
-    ports:
-      - "3333:3000"
+    networks:
+      - services
+      - monitoring
     volumes:
-      - grafana-data:/var/lib/grafana
+      - ${DOCKER_VOLUME_PATH}/grafana:/var/lib/grafana
     restart: unless-stopped
+    environment:
+      - GF_INSTALL_PLUGINS=grafana-piechart-panel
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 256M
 
-  node_exporter:
+  node-exporter:
     image: quay.io/prometheus/node-exporter:latest
-    container_name: node_exporter
+    container_name: node-exporter
     command:
       - '--path.rootfs=/host'
+    network_mode: host
     pid: host
     restart: unless-stopped
     volumes:
       - '/:/host:ro,rslave'
+    deploy:
+      resources:
+        limits:
+          cpus: '0.1'
+          memory: 32M
 
   cadvisor:
-    image: google/cadvisor:latest
+    image: gcr.io/cadvisor/cadvisor:latest
     container_name: cadvisor
     volumes:
       - /:/rootfs:ro
@@ -41,12 +60,35 @@ services:
       - /sys:/sys:ro
       - /var/lib/docker/:/var/lib/docker:ro
       - /dev/disk/:/dev/disk:ro
+    command:
+      - '--housekeeping_interval=55s'
+      - '--docker_only'
+    privileged: true
     devices:
       - /dev/kmsg
     restart: unless-stopped
+    networks:
+      - monitoring
+    deploy:
+      resources:
+        limits:
+          cpus: '0.1'
+          memory: 128M
 
-volumes:
-  prometheus-data:
-    driver: local
-  grafana-data:
-    driver: local
+  speedtest-exporter:
+    image: ghcr.io/mateuxlucax/unifique-speedtest-exporter:latest
+    container_name: speedtest-exporter
+    restart: unless-stopped
+    networks:
+      - monitoring
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 768M
+
+networks:
+  services:
+    external: true
+  monitoring:
+    driver: bridge

@@ -1,0 +1,14 @@
+services:
+  watchtower:
+    image: containrrr/watchtower
+    container_name: watchtower
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart: always
+    environment:
+      WATCHTOWER_CLEANUP: "true"
+    deploy: 
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 64M

@@ -1,0 +1,25 @@
+services:
+  stirling-pdf:
+    image: stirlingtools/stirling-pdf:latest
+    container_name: stirling-pdf
+    ports:
+      - '8080:8080'
+    volumes:
+      - ${DOCKER_VOLUME_PATH}/StirlingPDF/trainingData:/usr/share/tessdata # Required for extra OCR languages
+      - ${DOCKER_VOLUME_PATH}/StirlingPDF/extraConfigs:/configs
+      - ${DOCKER_VOLUME_PATH}/StirlingPDF/customFiles:/customFiles/
+      - ${DOCKER_VOLUME_PATH}/StirlingPDF/logs:/logs/
+      - ${DOCKER_VOLUME_PATH}/StirlingPDF/pipeline:/pipeline/
+    environment:
+      - DOCKER_ENABLE_SECURITY=false
+      - LANGS=${LANGS}
+    restart: unless-stopped
+    networks:
+      - services
+      - tunnel
+
+networks:
+  services:
+    external: true
+  tunnel:
+    external: true

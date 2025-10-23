@@ -1,0 +1,20 @@
+services: 
+  vaultwarden:
+    image: vaultwarden/server:alpine
+    container_name: vaultwarden
+    restart: always
+    environment:
+      - WEBSOCKET_ENABLED=true
+    volumes:
+      - ${DOCKER_VOLUME_PATH}/vaultwarden:/data
+    networks:
+      - tunnel
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 128M
+
+networks:
+  tunnel:
+    external: true

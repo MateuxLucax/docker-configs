@@ -1,0 +1,17 @@
+services:
+  cloudflared:
+    container_name: cloudflared
+    restart: unless-stopped
+    image: cloudflare/cloudflared:latest
+    command: tunnel --no-autoupdate run --token ${TOKEN}
+    networks:
+      - tunnel
+    deploy:
+      resources:
+        limits:
+          cpus: '0.1'
+          memory: 32M
+
+networks:
+  tunnel:
+    external: true

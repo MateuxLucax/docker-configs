@@ -1,0 +1,26 @@
+services:
+  youtubedl-material:
+    image: tzahi12345/youtubedl-material:latest
+    container_name: youtubedl-material
+    restart: unless-stopped
+    volumes:
+      - ${DOCKER_VOLUME_PATH}/youtubedl/appdata:/app/appdata
+      - ${DOCKER_VOLUME_PATH}/youtubedl/audio:/app/audio
+      - ${DOCKER_VOLUME_PATH}/youtubedl/video:/app/video
+      - ${DOCKER_VOLUME_PATH}/youtubedl/subscriptions:/app/subscriptions
+    environment:
+      - YDL_CONFIG_PATH=/app/appdata
+      - YDL_AUDIO_PATH=/app/audio
+      - YDL_VIDEO_PATH=/app/video
+      - YDL_SUBSCRIPTIONS_PATH=/app/subscriptions
+    networks:
+      - services
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 256M
+
+networks:
+  services:
+    external: true
